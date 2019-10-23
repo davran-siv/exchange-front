@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
 import { TodoTextInput } from 'app/components/TodoTextInput';
 import { TodoModel } from 'app/models/TodoModel';
+import * as classNames from 'classnames';
+import * as React from 'react';
 import * as style from './style.css';
 
 export interface TodoActions {

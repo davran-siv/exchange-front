@@ -1,5 +1,5 @@
-import { observable, computed, action } from 'mobx';
 import { TodoModel } from 'app/models';
+import { action, computed, observable } from 'mobx';
 
 export class TodoStore {
   constructor(fixtures: TodoModel[]) {
