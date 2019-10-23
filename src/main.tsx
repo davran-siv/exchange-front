@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Provider } from 'mobx-react';
-import { createBrowserHistory } from 'history';
+import { App } from 'app';
 import { TodoModel } from 'app/models';
 import { createStores } from 'app/stores';
-import { App } from 'app';
+import { createBrowserHistory } from 'history';
+import { Provider } from 'mobx-react';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 // default fixtures for TodoStore
 const defaultTodos = [
