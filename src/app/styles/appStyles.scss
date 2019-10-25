@@ -1,0 +1,18 @@
+@import "./styleUtilities";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", "sans-serif";
+  color: $text-color;
+}
+
+div, p {
+  font-weight: 300;
+}
+
+a {
+  text-decoration: none;
+  color: $primary-color;
+}

@@ -1,3 +1,4 @@
+import ListingCard from 'app/components/listingCard/listingCard'
 import Header from 'app/containers/header/header'
 import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router'
@@ -14,7 +15,10 @@ class HomeScene extends Component<HomeSceneState, HomeSceneProps> {
   render() {
 
     return (
-      <Header/>
+      <div className='home'>
+        <Header/>
+        <ListingCard/>
+      </div>
     )
   }
 }

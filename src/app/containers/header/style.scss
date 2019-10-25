@@ -1,0 +1,22 @@
+@import "../../styles/styleUtilities.scss";
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: $primary-bg;
+
+  &__inner {
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    grid-column-gap: 20px;
+    grid-template-columns: 120px 1fr;
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 30px;
+  }
+}
