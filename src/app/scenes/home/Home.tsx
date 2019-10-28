@@ -1,4 +1,4 @@
-import { Container, Grid, withStyles } from '@material-ui/core'
+import { Box, Container, Grid, Typography, withStyles } from '@material-ui/core'
 import ListingCard from 'app/components/listingCard/ListingCard'
 import Categories from 'app/containers/categories/Categories'
 import React, { Component, Fragment } from 'react'
@@ -28,11 +28,16 @@ class HomeScene extends Component<HomeSceneState, HomeSceneProps> {
       <Fragment>
         <Container className={classes.cardGrid} maxWidth="md">
           <Categories/>
-          <Grid container spacing={4}>
-            {cards.map(card => (
-              <ListingCard key={card}/>
-            ))}
-          </Grid>
+          <Box mt='50px'>
+            <Typography variant='h1'>Все объявления</Typography>
+          </Box>
+          <Box mt='50px'>
+            <Grid container spacing={4} justify='space-between'>
+              {cards.map(card => (
+                <ListingCard key={card}/>
+              ))}
+            </Grid>
+          </Box>
         </Container>
       </Fragment>
     )

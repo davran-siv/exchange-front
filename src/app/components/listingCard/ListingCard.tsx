@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Grid, makeStyles, Theme, Typography } from '@material-ui/core'
 import React from 'react'
+// import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const ListingCard = (props: any) => {
   const classes = useStyles({})
   return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item>
       <Card className={classes.card}>
         <CardMedia
           className={classes.media}

@@ -1,13 +1,22 @@
-import { Card, CardMedia, makeStyles, Theme } from '@material-ui/core'
+import { Card, CardContent, CardMedia, makeStyles, Theme } from '@material-ui/core'
 import React from 'react'
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
-    width: 200,
-    height: 140
+    padding: 10,
+    width: 150,
+    height: 120,
+    borderRadius: 28,
+    fontSize: 14
   },
   media: {
-    height: 155
+    backgroundSize: 'contain',
+    height: 55
+  },
+  content: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    textAlign: 'center'
   },
   can: {
     // title:
@@ -30,6 +39,7 @@ const MainCategory = (props: MainCategoryProps) => {
         image={props.icon}
         title={props.title}
       />
+      <CardContent className={classes.content}>{props.title}</CardContent>
     </Card>
   )
 }
