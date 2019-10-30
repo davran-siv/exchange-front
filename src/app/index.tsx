@@ -2,7 +2,7 @@ import { Container } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 import PrimarySearchAppBar from 'app/containers/header/Header'
 import { Root } from 'app/containers/Root'
-import CreateAd from 'app/scenes/createAd/CreateAd'
+import CreateAd from 'app/scenes/createAd/createAd'
 import HomeScene from 'app/scenes/home/Home'
 import theme from 'app/styles/theme'
 import * as React from 'react'
@@ -18,8 +18,8 @@ export const App = hot(({ history }) => (
         <PrimarySearchAppBar/>
         <Container>
           <Switch>
-            <Route path="/" component={HomeScene}/>
-            <Route path="/create-ad" component={CreateAd}/>
+            <Route path="/" component={HomeScene} exact/>
+            <Route path="/create-ad" component={CreateAd} exact/>
           </Switch>
         </Container>
       </Router>

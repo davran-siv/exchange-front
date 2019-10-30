@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Typography, withStyles } from '@material-ui/core'
 import ListingCard from 'app/components/listingCard/ListingCard'
-import Categories from 'app/containers/categories/Categories'
+import Categories from 'app/containers/categories/categories'
 import React, { Component, Fragment } from 'react'
 import { RouteComponentProps } from 'react-router'
 
@@ -21,13 +21,17 @@ const useStyles = theme => ({
 })
 
 class HomeScene extends Component<HomeSceneState, HomeSceneProps> {
+  onCategorySelect = (categoryId: string) => {
+    console.log(categoryId)
+  }
+
   render() {
     const { classes } = this.props
 
     return (
       <Fragment>
         <Container className={classes.cardGrid} maxWidth="md">
-          <Categories/>
+          <Categories onSelect={this.onCategorySelect}/>
           <Box mt='50px'>
             <Typography variant='h1'>Все объявления</Typography>
           </Box>

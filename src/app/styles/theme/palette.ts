@@ -51,6 +51,7 @@ export default {
     paper: '#FDFDFD',
     default: '#E5E5E5'
   },
+  boxShadow: '0px 0px 14.1673px rgba(142, 142, 142, 0.25)',
   icon: colors.blueGrey[600],
   divider: colors.grey[200]
 }
