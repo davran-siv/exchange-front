@@ -1,18 +1,31 @@
-import { Container, Typography } from '@material-ui/core'
+import { Button, Container, Typography } from '@material-ui/core'
 import Categories from 'app/containers/categories/categories'
-import React from 'react'
+import { Formik } from 'formik'
+import React, { Fragment } from 'react'
 
 class CreateAd extends React.Component<any> {
-  onCategorySelect = (categoryId: string) => {
-    console.log(categoryId)
-  }
-
   render() {
     return (
       <Container>
         <Typography variant='h1'>Создание нового объявления</Typography>
-        <Typography variant='h5' color='secondary'>Создание нового объявления</Typography>
-        <Categories onSelect={this.onCategorySelect}/>
+        <Typography variant='h5' color='secondary'>
+          Для заполнения потребуется около 5 минут
+        </Typography>
+        <Formik
+          initialValues={{
+            categoryId: null
+          }}
+          onSubmit={(values) => {
+            console.log(values)
+          }}
+        >
+          {({ values, errors, setValues, submitForm }) => (
+            <Fragment>
+              <Categories onSelect={(categoryId) => setValues({ categoryId })}/>
+              <Button onClick={submitForm}>Дальше</Button>
+            </Fragment>
+          )}
+        </Formik>
       </Container>
     )
   }
