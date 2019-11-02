@@ -24,6 +24,9 @@ class HomeScene extends Component<HomeSceneState, HomeSceneProps> {
   onCategorySelect = (categoryId: string) => {
     console.log(categoryId)
   }
+  onCategoryDeselect = () => {
+    console.log('onCategoryDeselect')
+  }
 
   render() {
     const { classes } = this.props
@@ -31,7 +34,11 @@ class HomeScene extends Component<HomeSceneState, HomeSceneProps> {
     return (
       <Fragment>
         <Container className={classes.cardGrid} maxWidth="md">
-          <Categories onSelect={this.onCategorySelect}/>
+          <Categories
+            onSelect={this.onCategorySelect}
+            onDeselect={this.onCategoryDeselect}
+            value=''
+          />
           <Box mt='50px'>
             <Typography variant='h1'>Все объявления</Typography>
           </Box>

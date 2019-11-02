@@ -99,7 +99,9 @@ const useStyles = theme => ({
 
 interface CategoriesProps {
   onSelect: (categoryId: string) => void,
+  onDeselect: () => void,
   classes: any
+  value: string | null
 }
 
 interface CategoriesState {
@@ -120,7 +122,6 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
   }
 
   onClick = async (category: ICategory): Promise<void> => {
-    console.log('category => ', category)
     if (!category.parentCategory) {
       this.setState({ selectedMainCategory: category })
     } else {
@@ -131,7 +132,10 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
     const subcategories = await this.getSubCategories(category.id)
     this.setState({ subcategories })
     if (!subcategories.length) {
-      this.props.onSelect(category.id)
+      return this.props.onSelect(category.id)
+    }
+    if (this.props.value) {
+      this.props.onDeselect()
     }
   }
 
@@ -154,7 +158,7 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
           <Typography key={category.id}>{category.title}</Typography>
         ))}
         {this.state.subcategories.map(category => (
-          <Button key={category.id} onClick={() => this.onClick(category)}>{category.title}</Button>
+          <Button type='button' key={category.id} onClick={() => this.onClick(category)}>{category.title}</Button>
         ))}
       </Box>
     )
