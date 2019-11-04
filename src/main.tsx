@@ -15,7 +15,6 @@ const defaultTodos = [
 // prepare MobX stores
 const history = createBrowserHistory();
 const rootStore = createStores(history, defaultTodos);
-
 // render react DOM
 ReactDOM.render(
   <Provider {...rootStore}>

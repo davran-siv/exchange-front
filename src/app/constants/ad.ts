@@ -8,6 +8,6 @@ export enum AdStatus {
 }
 
 export enum AdType {
-  'service',
-  'product'
+  service = 'service',
+  product = 'product'
 }

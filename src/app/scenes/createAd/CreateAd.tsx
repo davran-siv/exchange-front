@@ -1,5 +1,9 @@
 import { Container, Typography } from '@material-ui/core'
+import CreateAdFirstStep from 'app/containers/createAdSteps/firstStep/FirstStep'
+import CreateAdSecondStep from 'app/containers/createAdSteps/secondStep/SecondStep'
+import CreateAdThirdStep from 'app/containers/createAdSteps/thirdStep/ThirdStep'
 import React from 'react'
+import { Route, Switch } from 'react-router'
 
 
 class CreateAd extends React.Component<any> {
@@ -10,10 +14,11 @@ class CreateAd extends React.Component<any> {
         <Typography variant='h5' color='secondary'>
           Для заполнения потребуется около 5 минут
         </Typography>
-        {/*<Switch>*/}
-        {/*  <Route path="/create-ad/some" component={CreateAdFirstStep} exact/>*/}
-        {/*  <Route path="/create-ad/:id/can" component={CreateAdSecondStep} exact/>*/}
-        {/*</Switch>*/}
+        <Switch>
+          <Route path="/create-ad" component={CreateAdFirstStep} exact/>
+          <Route path="/create-ad/:id/second" component={CreateAdSecondStep} exact/>
+          <Route path="/create-ad/:id/third" component={CreateAdThirdStep} exact/>
+        </Switch>
       </Container>
     )
   }

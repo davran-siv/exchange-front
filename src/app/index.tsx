@@ -7,8 +7,7 @@ import HomeScene from 'app/scenes/home/Home'
 import theme from 'app/styles/theme'
 import * as React from 'react'
 import { hot } from 'react-hot-loader/root'
-import { Route, Router, Switch } from 'react-router-dom'
-import './styles/appStyles.scss'
+import { Route, Router, Switch } from 'react-router'
 
 // render react DOM
 export const App = hot(({ history }) => (
@@ -19,7 +18,7 @@ export const App = hot(({ history }) => (
         <Container>
           <Switch>
             <Route path="/" component={HomeScene} exact/>
-            <Route path="/create-ad/some" component={CreateAd} exact/>
+            <Route path="/create-ad" component={CreateAd}/>
           </Switch>
         </Container>
       </Router>
