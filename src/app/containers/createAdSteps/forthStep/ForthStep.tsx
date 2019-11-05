@@ -11,11 +11,11 @@ const validationSchema = Yup.object().shape({
 })
 
 
-const CreateAdThirdStep = (props: any) => {
+const CreateAdForthStep = (props: any) => {
   return (
     <Formik
       initialValues={{
-        categoryId: '',
+        categoryId: [],
         considerOptions: false
       }}
       validationSchema={validationSchema}
@@ -25,10 +25,10 @@ const CreateAdThirdStep = (props: any) => {
     >
       {({ values, submitForm, setFieldValue }) => {
         const onCategorySelect = (categoryId) => {
-          setFieldValue('categoryId', categoryId)
+          setFieldValue('categoryId', [categoryId])
         }
         const onCategoryDeselect = () => {
-          setFieldValue('categoryId', '')
+          setFieldValue('categoryId', [])
         }
 
         return (
@@ -36,7 +36,7 @@ const CreateAdThirdStep = (props: any) => {
             <Categories
               onSelect={onCategorySelect}
               onDeselect={onCategoryDeselect}
-              value={values.categoryId}
+              value={values.categoryId && values.categoryId.length && values.categoryId[0]}
             />
             <div>
               <Field
@@ -54,4 +54,4 @@ const CreateAdThirdStep = (props: any) => {
   )
 }
 
-export default CreateAdThirdStep
+export default CreateAdForthStep
