@@ -1,5 +1,5 @@
 import { Button, FormControlLabel, Radio } from '@material-ui/core'
-import { TextField, RadioGroupCustom, SimpleFileUpload } from 'app/components/common/formInput'
+import { CustomTextField, RadioGroupCustom, SimpleFileUpload } from 'app/components/common/formInput'
 import { AdType } from 'app/constants'
 import { Field, Form, Formik } from 'formik'
 import React from 'react'
@@ -48,7 +48,7 @@ const CreateAdSecondStep = (props: any) => {
               <Field
                 name="title"
                 label='Заголовок'
-                component={TextField}
+                component={CustomTextField}
               />
             </div>
             <div>
@@ -57,7 +57,7 @@ const CreateAdSecondStep = (props: any) => {
                 label='Описание'
                 rowsMax="4"
                 multiline
-                component={TextField}
+                component={CustomTextField}
               />
             </div>
             <div>

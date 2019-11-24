@@ -1,10 +1,10 @@
 export enum AdStatus {
-  'approved',
-  'banned',
-  'underConsideration',
-  'deleted',
-  'closed',
-  'notFullFilled'
+  approved = 'approved',
+  banned = 'banned',
+  underConsideration = 'underConsideration',
+  deleted = 'deleted',
+  closed = 'closed',
+  notFullFilled = 'notFullFilled'
 }
 
 export enum AdType {

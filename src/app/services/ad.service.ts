@@ -1,12 +1,12 @@
 import { CreateAdResponseDTO, CreateAdSecondStepRequestDTO } from 'app/interfaces'
 
-interface Ad {
+interface AdService {
   createAd(categoryId: string): Promise<CreateAdResponseDTO>
 
   createAdSecondStep(dto: CreateAdSecondStepRequestDTO): Promise<any>
 }
 
-class Ad implements Ad {
+class AdServiceImplementation implements AdService {
   async createAd(categoryId: string): Promise<CreateAdResponseDTO> {
     return {
       id: '4b37761a-9edf-480d-b127-5641e4f0c3c9',
@@ -28,6 +28,11 @@ class Ad implements Ad {
     }
   }
 
+  async createAdSecondStep(dto: CreateAdSecondStepRequestDTO): Promise<any>{
+
+  }
+
+
 }
 
-export default Ad
+export default AdServiceImplementation

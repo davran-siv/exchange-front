@@ -34,7 +34,7 @@ export const fieldToTextField = ({
   }
 }
 
-export const TextField: React.ComponentType<TextFieldProps> = (
+export const CustomTextField: React.ComponentType<TextFieldProps> = (
   {
     children,
     ...props
@@ -44,4 +44,4 @@ export const TextField: React.ComponentType<TextFieldProps> = (
     <MuiTextField {...fieldToTextField(props)}>{children}</MuiTextField>
   )
 
-TextField.displayName = 'FormikMaterialUITextField'
+CustomTextField.displayName = 'FormikMaterialUITextField'
