@@ -1,3 +1,7 @@
 import TodoModel from './TodoModel';
+import UserModel from './user.model';
 
-export { TodoModel };
+export {
+  TodoModel,
+  UserModel
+};

@@ -1,4 +1,3 @@
-import { Footer } from 'app/components/Footer'
 import { TodoList } from 'app/components/TodoList'
 import { STORE_ROUTER, STORE_TODO, TODO_FILTER_LOCATION_HASH, TodoFilter } from 'app/constants'
 import { RouterStore, TodoStore } from 'app/stores'
@@ -43,14 +42,14 @@ export class TodoApp extends React.Component<TodoAppProps, TodoAppState> {
     this.setState({ filter });
   }
 
-  private handleFilter = (filter: TodoFilter) => {
-    const router = this.props[STORE_ROUTER] as RouterStore;
-    const currentHash = router.location.hash;
-    const nextHash = TODO_FILTER_LOCATION_HASH[filter];
-    if (currentHash !== nextHash) {
-      router.replace(nextHash);
-    }
-  };
+  // private handleFilter = (filter: TodoFilter) => {
+  //   const router = this.props[STORE_ROUTER] as RouterStore;
+  //   const currentHash = router.location.hash;
+  //   const nextHash = TODO_FILTER_LOCATION_HASH[filter];
+  //   if (currentHash !== nextHash) {
+  //     router.replace(nextHash);
+  //   }
+  // };
 
   getFilteredTodo(filter: TodoFilter) {
     const todoStore = this.props[STORE_TODO] as TodoStore;
@@ -70,15 +69,15 @@ export class TodoApp extends React.Component<TodoAppProps, TodoAppState> {
     const { filter } = this.state;
     const filteredTodos = this.getFilteredTodo(filter);
 
-    const footer = todoStore.todos.length && (
-      <Footer
-        filter={filter}
-        activeCount={todoStore.activeTodos.length}
-        completedCount={todoStore.completedTodos.length}
-        onClearCompleted={todoStore.clearCompleted}
-        onChangeFilter={this.handleFilter}
-      />
-    );
+    // const footer = todoStore.todos.length && (
+    //   <Footer
+    //     filter={filter}
+    //     activeCount={todoStore.activeTodos.length}
+    //     completedCount={todoStore.completedTodos.length}
+    //     onClearCompleted={todoStore.clearCompleted}
+    //     onChangeFilter={this.handleFilter}
+    //   />
+    // );
 
     return (
       <div className={style.normal}>
@@ -88,7 +87,7 @@ export class TodoApp extends React.Component<TodoAppProps, TodoAppState> {
           deleteTodo={todoStore.deleteTodo}
           editTodo={todoStore.editTodo}
         />
-        {footer}
+        {/*{footer}*/}
         {children}
       </div>
     );

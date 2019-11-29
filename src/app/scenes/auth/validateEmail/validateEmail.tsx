@@ -6,14 +6,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { CustomTextField } from 'app/components/common/formInput'
+import { STORE_TODO, STORE_USER } from 'app/constants'
+import { UserStore } from 'app/stores'
 import { Field, Form, Formik } from 'formik'
+import { inject, observer } from 'mobx-react'
 import React from 'react'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email().required('Введите вашу почту'),
+  email: Yup.string().email().required('Введите вашу почту')
 })
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,9 +43,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ValidateEmail = () => {
+const ValidateEmailComponent = (props) => {
   const classes = useStyles({})
-
+  const store = props[STORE_USER] as UserStore
+  console.log(store)
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline/>
@@ -60,7 +63,7 @@ const ValidateEmail = () => {
             email: ''
           }}
           onSubmit={(values) => {
-            console.log(values)
+            store.validateEmail(values.email)
           }}
         >
           {({ values, errors, submitForm, setFieldValue, handleSubmit, isSubmitting }) => {
@@ -83,5 +86,10 @@ const ValidateEmail = () => {
     </Container>
   )
 }
+
+const ValidateEmail = inject(STORE_USER, STORE_TODO)(observer((props) => {
+  console.log(props)
+  return <ValidateEmailComponent {...props}/>
+}))
 
 export default ValidateEmail
