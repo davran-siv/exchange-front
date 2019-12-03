@@ -1,12 +1,10 @@
-import { observable } from 'mobx'
-
 export class UserModel {
   readonly id: string
-  @observable readonly firstName: string
-  @observable readonly lastName: string
-  @observable readonly emailAddress: string
-  @observable readonly photo: string | null
-  @observable readonly isEmailVerified: boolean
+  readonly firstName: string
+  readonly lastName: string
+  readonly emailAddress: string
+  readonly photo: string | null
+  readonly isEmailVerified: boolean
 
   constructor(model: UserModel) {
     this.id = model.id

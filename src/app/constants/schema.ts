@@ -96,7 +96,7 @@ export const typeDefs = gql`
         imageIds: [String!]
     }
 
-    type AuthJwtTokes {
+    type AuthJwtTokesQuery {
         accessToken: String!
         refreshToken: String!
     }
@@ -114,9 +114,9 @@ export const typeDefs = gql`
 
     """Email statuses"""
     enum EmailStatus {
-        free
-        exists
-        notConfirmed
+        FREE
+        EXISTS
+        NOT_CONFIRMED
     }
 
     type EmailStatusQuery {
@@ -129,7 +129,7 @@ export const typeDefs = gql`
     }
 
     input LoginByCredentialsInput {
-        emailAddress: String!
+        email: String!
         password: String!
     }
 
@@ -148,7 +148,7 @@ export const typeDefs = gql`
         adCategoryCreateOne(adCategory: AdCategoryCreateInput!): AdCategory!
         adCategoryUpdateOne(adCategory: AdCategoryUpdateInput!): AdCategory!
         adCategoryRemoveOne(id: String!): Boolean!
-        userCreate(user: UserCreateInput!): UserQuery!
+        userCreate(user: UserCreateInput!): UserCreateResponseQuery!
         userUpdate(user: UserUpdateInput!): UserQuery!
         userChangePassword(passwords: UserChangePasswordInput!): UserQuery!
         userRemove(id: String!): Boolean!
@@ -162,8 +162,8 @@ export const typeDefs = gql`
         userFindById(id: String!): UserQuery!
         userMe: UserQuery!
         userGetEmailStatus(email: String!): UserEmailStatusQuery!
-        loginByCredentials(auth: LoginByCredentialsInput!): AuthJwtTokes!
-        refreshToken(auth: RefreshTokenInput!): AuthJwtTokes!
+        loginByCredentials(auth: LoginByCredentialsInput!): AuthJwtTokesQuery!
+        refreshToken(auth: RefreshTokenInput!): AuthJwtTokesQuery!
     }
 
     input RefreshTokenInput {
@@ -178,9 +178,14 @@ export const typeDefs = gql`
     input UserCreateInput {
         firstName: String!
         lastName: String!
-        emailAddress: String!
+        email: String!
         password: String!
         photo: String
+    }
+
+    type UserCreateResponseQuery {
+        user: UserQuery!
+        tokens: AuthJwtTokesQuery!
     }
 
     type UserEmailStatusQuery {
@@ -191,7 +196,10 @@ export const typeDefs = gql`
         id: ID!
         firstName: String!
         lastName: String!
-        emailAddress: String!
+        email: String!
+        isEmailVerified: Boolean!
+        phoneNumber: String
+        isPhoneVerified: Boolean!
         photo: String
     }
 
@@ -199,7 +207,7 @@ export const typeDefs = gql`
         id: ID!
         firstName: String
         lastName: String
-        emailAddress: String
+        email: String
         photo: String
     }
 

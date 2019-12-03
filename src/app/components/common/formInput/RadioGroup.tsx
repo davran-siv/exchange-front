@@ -1,8 +1,6 @@
-import * as React from 'react'
-import MuiRadioGroup, {
-  RadioGroupProps as MuiRadioGroupProps
-} from '@material-ui/core/RadioGroup'
+import MuiRadioGroup, { RadioGroupProps as MuiRadioGroupProps } from '@material-ui/core/RadioGroup'
 import { FieldProps } from 'formik'
+import * as React from 'react'
 
 export interface RadioGroupProps
   extends Omit<MuiRadioGroupProps, 'name' | 'onChange' | 'value'>,

@@ -1,8 +1,6 @@
-import * as React from 'react'
-import MuiTextField, {
-  TextFieldProps as MuiTextFieldProps
-} from '@material-ui/core/TextField'
+import MuiTextField, { TextFieldProps as MuiTextFieldProps } from '@material-ui/core/TextField'
 import { FieldProps, getIn } from 'formik'
+import * as React from 'react'
 
 export type TextFieldProps = FieldProps &
   Omit<MuiTextFieldProps, 'error' | 'name' | 'onChange' | 'value'> & {

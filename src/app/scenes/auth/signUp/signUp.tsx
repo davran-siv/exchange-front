@@ -6,10 +6,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { CustomTextField } from 'app/components/common/formInput'
-import { EmailStatus, isSucceededStatus } from 'app/constants'
-import { RootReducer } from 'app/interfaces'
-import { authValidateEmailRequest } from 'app/redux/auth/auth.actions'
-import { ValidateEmailDTO } from 'app/redux/auth/auth.reducer'
+import { RootReducer, UserCreateRequestDTO } from 'app/interfaces'
+import { authSignUpRequest } from 'app/redux/auth/auth.actions'
 import { Field, Form, Formik } from 'formik'
 import React from 'react'
 import { connect } from 'react-redux'
@@ -17,7 +15,9 @@ import { Redirect } from 'react-router'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email().required('Введите вашу почту')
+  firstName: Yup.string().required('Введите имя'),
+  lastName: Yup.string().required('Введите фамилию'),
+  password: Yup.string().required('Введите пароль')
 })
 
 
@@ -46,19 +46,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface ValidateEmailProps extends ValidateEmailDTO {
+interface ValidateEmailProps {
+  contextEmail: string | null
   validateEmail: (email: string) => void,
+  signUp: (user: UserCreateRequestDTO) => void
 }
 
-const ValidateEmailComponent = (props: ValidateEmailProps) => {
+const SignUpComponent = (props: ValidateEmailProps) => {
   const classes = useStyles({})
-  if (isSucceededStatus(props.status)) {
-    switch (props.result) {
-      case EmailStatus.free:
-        return <Redirect to='/sign-up'/>
-      case EmailStatus.exists:
-        return <Redirect to='/sign-in'/>
-    }
+  if(!props.contextEmail) {
+    return <Redirect to='/auth'/>
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -68,15 +65,18 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Вход
+          Регистрация
         </Typography>
         <Formik
           validationSchema={validationSchema}
           initialValues={{
-            email: ''
+            firstName: '',
+            lastName: '',
+            password: '',
+            email: props.contextEmail
           }}
           onSubmit={(values) => {
-            props.validateEmail(values.email)
+            props.signUp(values)
           }}
         >
           {({ values, errors, submitForm, setFieldValue, handleSubmit, isSubmitting }) => {
@@ -84,13 +84,27 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
               <Form>
                 <div>
                   <Field
-                    name="email"
-                    label='Email'
-                    type='email'
+                    name="firstName"
+                    label='First name'
                     component={CustomTextField}
                   />
                 </div>
-                <Button onClick={submitForm}>Дальше</Button>
+                <div>
+                  <Field
+                    name="lastName"
+                    label='Last name'
+                    component={CustomTextField}
+                  />
+                </div>
+                <div>
+                  <Field
+                    name="password"
+                    label='Password'
+                    type='password'
+                    component={CustomTextField}
+                  />
+                </div>
+                <Button onClick={submitForm}>Зарегистрироваться</Button>
               </Form>
             )
           }}
@@ -100,20 +114,18 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
   )
 }
 
-const mapStateToProps = (state: RootReducer, ownProps) => {
-  return {
-    ...ownProps,
-    ...state.auth.validateEmail
-  }
-}
+const mapStateToProps = (state: RootReducer, ownProps) => ({
+  ...ownProps,
+  contextEmail: state.auth.contextEmail
+})
 
 const mapDispatchToProps = (dispatch => ({
-  validateEmail: (email) => dispatch(authValidateEmailRequest(email))
+  signUp: (user) => dispatch(authSignUpRequest(user))
 }))
 
-const ValidateEmail = connect(
+const SignUp = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ValidateEmailComponent)
+)(SignUpComponent)
 
-export default ValidateEmail
+export default SignUp
