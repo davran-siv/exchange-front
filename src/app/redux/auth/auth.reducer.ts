@@ -64,7 +64,6 @@ export const authReducer = createReducer<authActionsDTO, AuthReducerDTO>(default
     }
   },
   [authActionsDTO.AUTH_SIGN_UP_SUCCESS](state: AuthReducerDTO, action: Action<authActionsDTO, UserResponseDTO>) {
-    console.log(action.payload)
     return {
       ...state,
       currentUser: {

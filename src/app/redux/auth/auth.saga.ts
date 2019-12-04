@@ -1,12 +1,18 @@
 import { gql } from 'apollo-boost'
+import { accessTokenKeyInLocalStorage, refreshTokenKeyInLocalStorage } from 'app/constants'
 import { UserCreateRequestDTO } from 'app/interfaces'
 import { AuthJwtTokes } from 'app/interfaces/auth'
 import { authActionsDTO, authSignUpSuccess, authValidateEmailSuccess } from 'app/redux/auth/auth.actions'
 import { fork, put, takeEvery } from 'redux-saga/effects'
 import { apolloClient } from '../../../main'
 
-function* authorizeUser(dto: AuthJwtTokes) {
+const setTokensToLocalStorage = (dto: AuthJwtTokes) => {
+  localStorage.setItem(accessTokenKeyInLocalStorage, dto.accessToken)
+  localStorage.setItem(refreshTokenKeyInLocalStorage, dto.refreshToken)
+}
 
+function authorizeUser(dto: AuthJwtTokes) {
+  setTokensToLocalStorage(dto)
 }
 
 function* authValidateEmailRequestWorker({ payload }: { payload: { email: string } }) {
@@ -58,6 +64,7 @@ function* authSignUpRequestWorker({ payload }: { payload: UserCreateRequestDTO }
     tokens: { __typename: tokensTypename, ...tokens }
   } = data.userCreate
   yield put(authSignUpSuccess(user))
+  yield authorizeUser(tokens)
 }
 
 export function* authSignUpRequestWatcher() {
