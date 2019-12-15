@@ -1,7 +1,7 @@
 import { Container, Typography } from '@material-ui/core'
 import CreateAdFirstStep from 'app/containers/createAdSteps/firstStep/FirstStep'
-import CreateAdSecondStep from 'app/containers/createAdSteps/secondStep/SecondStep'
 import CreateAdForthStep from 'app/containers/createAdSteps/forthStep/ForthStep'
+import CreateAdSecondStep from 'app/containers/createAdSteps/secondStep/SecondStep'
 import React from 'react'
 import { Route, Switch } from 'react-router'
 

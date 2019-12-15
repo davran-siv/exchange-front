@@ -1,8 +1,6 @@
-import * as React from 'react'
-import MuiCheckbox, {
-  CheckboxProps as MuiCheckboxProps
-} from '@material-ui/core/Checkbox'
+import MuiCheckbox, { CheckboxProps as MuiCheckboxProps } from '@material-ui/core/Checkbox'
 import { FieldProps } from 'formik'
+import * as React from 'react'
 
 export interface CheckboxProps
   extends FieldProps,

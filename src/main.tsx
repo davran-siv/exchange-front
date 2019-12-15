@@ -1,28 +1,44 @@
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import ApolloClient from 'apollo-boost'
-import { HttpLink } from 'apollo-link-http'
+import { ApolloClient } from 'apollo-client'
+import { setContext } from 'apollo-link-context'
+import { createHttpLink } from 'apollo-link-http'
 import { App } from 'app'
 import { typeDefs } from 'app/constants/schema'
-import { TodoModel } from 'app/models'
-import { createStores } from 'app/stores'
+import { getAccessToken } from 'app/redux/auth/auth.saga'
+import configureStore from 'app/redux/configureStore'
 import { createBrowserHistory } from 'history'
-import { Provider } from 'mobx-react'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:5000/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = getAccessToken()
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+})
 
 export const apolloClient = new ApolloClient({
-  uri: 'http://localhost:5000/graphql',
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
   typeDefs
 })
 
-// prepare MobX stores
 const history = createBrowserHistory()
-const rootStore = createStores(history)
-
+const { store } = configureStore();
 
 // render react DOM
 ReactDOM.render(
-  <Provider {...rootStore}>
+  <Provider store={store}>
     <App history={history}/>
   </Provider>,
   document.getElementById('root')

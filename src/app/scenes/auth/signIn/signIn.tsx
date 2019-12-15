@@ -6,18 +6,19 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { CustomTextField } from 'app/components/common/formInput'
-import { EmailStatus, isSucceededStatus } from 'app/constants'
-import { RootReducer } from 'app/interfaces'
-import { authValidateEmailRequest } from 'app/redux/auth/auth.actions'
-import { ValidateEmailDTO } from 'app/redux/auth/auth.reducer'
+import { isSucceededStatus } from 'app/constants'
+import { CommonReducer, RootReducer } from 'app/interfaces'
+import { AuthSignInDTO } from 'app/interfaces/auth'
+import { authSignInRequest } from 'app/redux/auth/auth.actions'
 import { Field, Form, Formik } from 'formik'
-import React from 'react'
+import { History } from 'history'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email().required('Введите вашу почту')
+  password: Yup.string().required('Введите пароль')
 })
 
 
@@ -46,20 +47,23 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface ValidateEmailProps extends ValidateEmailDTO {
-  validateEmail: (email: string) => void,
+interface ValidateEmailProps {
+  contextEmail: string | null
+  signIn: (dto: AuthSignInDTO) => void,
+  signInState: CommonReducer,
+  history: History
 }
 
-const ValidateEmailComponent = (props: ValidateEmailProps) => {
-  const classes = useStyles({})
-  if (isSucceededStatus(props.status)) {
-    switch (props.result) {
-      case EmailStatus.free:
-        return <Redirect to='/sign-up'/>
-      case EmailStatus.exists:
-      case EmailStatus.notConfirmed:
-        return <Redirect to='/sign-in'/>
+const SignInComponent = (props: ValidateEmailProps) => {
+  useEffect(() => {
+    if (isSucceededStatus(props.signInState.status)) {
+      props.history.push('/')
     }
+  }, [props.signInState.status])
+
+  const classes = useStyles({})
+  if (!props.contextEmail) {
+    return <Redirect to='/auth'/>
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -69,15 +73,16 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Вход
+          Войти
         </Typography>
         <Formik
           validationSchema={validationSchema}
           initialValues={{
-            email: ''
+            password: '',
+            email: props.contextEmail
           }}
           onSubmit={(values) => {
-            props.validateEmail(values.email)
+            props.signIn(values)
           }}
         >
           {({ values, errors, submitForm, setFieldValue, handleSubmit, isSubmitting }) => {
@@ -85,13 +90,13 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
               <Form>
                 <div>
                   <Field
-                    name="email"
-                    label='Email'
-                    type='email'
+                    name="password"
+                    label='Password'
+                    type='password'
                     component={CustomTextField}
                   />
                 </div>
-                <Button onClick={submitForm}>Дальше</Button>
+                <Button onClick={submitForm}>Войти</Button>
               </Form>
             )
           }}
@@ -101,20 +106,19 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
   )
 }
 
-const mapStateToProps = (state: RootReducer, ownProps) => {
-  return {
-    ...ownProps,
-    ...state.auth.validateEmail
-  }
-}
+const mapStateToProps = (state: RootReducer, ownProps) => ({
+  ...ownProps,
+  contextEmail: state.auth.contextEmail,
+  signInState: state.auth.signIn
+})
 
 const mapDispatchToProps = (dispatch => ({
-  validateEmail: (email) => dispatch(authValidateEmailRequest(email))
+  signIn: (payload) => dispatch(authSignInRequest(payload))
 }))
 
-const ValidateEmail = connect(
+const SignIn = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ValidateEmailComponent)
+)(SignInComponent)
 
-export default ValidateEmail
+export default SignIn

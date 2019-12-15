@@ -1,8 +1,6 @@
-import * as React from 'react'
-import MuiSwitch, {
-  SwitchProps as MuiSwitchProps
-} from '@material-ui/core/Switch'
+import MuiSwitch, { SwitchProps as MuiSwitchProps } from '@material-ui/core/Switch'
 import { FieldProps } from 'formik'
+import * as React from 'react'
 
 export interface SwitchProps
   extends FieldProps,
