@@ -6,17 +6,18 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { CustomTextField } from 'app/components/common/formInput'
-import { RootReducer, UserCreateRequestDTO } from 'app/interfaces'
-import { authSignUpRequest } from 'app/redux/auth/auth.actions'
+import { isSucceededStatus } from 'app/constants'
+import { CommonReducer, RootReducer } from 'app/interfaces'
+import { AuthSignInDTO } from 'app/interfaces/auth'
+import { authSignInRequest } from 'app/redux/auth/auth.actions'
 import { Field, Form, Formik } from 'formik'
-import React from 'react'
+import { History } from 'history'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required('Введите имя'),
-  lastName: Yup.string().required('Введите фамилию'),
   password: Yup.string().required('Введите пароль')
 })
 
@@ -48,12 +49,20 @@ const useStyles = makeStyles(theme => ({
 
 interface ValidateEmailProps {
   contextEmail: string | null
-  signUp: (user: UserCreateRequestDTO) => void
+  signIn: (dto: AuthSignInDTO) => void,
+  signInState: CommonReducer,
+  history: History
 }
 
-const SignUpComponent = (props: ValidateEmailProps) => {
+const SignInComponent = (props: ValidateEmailProps) => {
+  useEffect(() => {
+    if (isSucceededStatus(props.signInState.status)) {
+      props.history.push('/')
+    }
+  }, [props.signInState.status])
+
   const classes = useStyles({})
-  if(!props.contextEmail) {
+  if (!props.contextEmail) {
     return <Redirect to='/auth'/>
   }
   return (
@@ -64,37 +73,21 @@ const SignUpComponent = (props: ValidateEmailProps) => {
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Регистрация
+          Войти
         </Typography>
         <Formik
           validationSchema={validationSchema}
           initialValues={{
-            firstName: '',
-            lastName: '',
             password: '',
             email: props.contextEmail
           }}
           onSubmit={(values) => {
-            props.signUp(values)
+            props.signIn(values)
           }}
         >
           {({ values, errors, submitForm, setFieldValue, handleSubmit, isSubmitting }) => {
             return (
               <Form>
-                <div>
-                  <Field
-                    name="firstName"
-                    label='First name'
-                    component={CustomTextField}
-                  />
-                </div>
-                <div>
-                  <Field
-                    name="lastName"
-                    label='Last name'
-                    component={CustomTextField}
-                  />
-                </div>
                 <div>
                   <Field
                     name="password"
@@ -103,7 +96,7 @@ const SignUpComponent = (props: ValidateEmailProps) => {
                     component={CustomTextField}
                   />
                 </div>
-                <Button onClick={submitForm}>Зарегистрироваться</Button>
+                <Button onClick={submitForm}>Войти</Button>
               </Form>
             )
           }}
@@ -115,16 +108,17 @@ const SignUpComponent = (props: ValidateEmailProps) => {
 
 const mapStateToProps = (state: RootReducer, ownProps) => ({
   ...ownProps,
-  contextEmail: state.auth.contextEmail
+  contextEmail: state.auth.contextEmail,
+  signInState: state.auth.signIn
 })
 
 const mapDispatchToProps = (dispatch => ({
-  signUp: (user) => dispatch(authSignUpRequest(user))
+  signIn: (payload) => dispatch(authSignInRequest(payload))
 }))
 
-const SignUp = connect(
+const SignIn = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignUpComponent)
+)(SignInComponent)
 
-export default SignUp
+export default SignIn

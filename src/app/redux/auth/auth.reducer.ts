@@ -1,24 +1,17 @@
 import { DataStatusType, EmailStatus } from 'app/constants'
-import { Action, UserResponseDTO } from 'app/interfaces'
-import { authActionsDTO } from 'app/redux/auth/auth.actions'
+import { Action, CommonReducer } from 'app/interfaces'
+import { authActionTypes } from 'app/redux/auth/auth.actions'
 import createReducer from 'app/redux/createReducer'
 
-export interface ValidateEmailDTO {
-  status: DataStatusType,
+export interface ValidateEmailDTO extends CommonReducer {
   result: any,
-  errorText: string
-}
-
-interface CurrentUserDTO {
-  user: UserResponseDTO | null,
-  status: DataStatusType,
-  errorText: string
 }
 
 export interface AuthReducerDTO {
   validateEmail: ValidateEmailDTO
-  contextEmail: string
-  currentUser: CurrentUserDTO
+  contextEmail: string,
+  signUp: CommonReducer
+  signIn: CommonReducer
 }
 
 const defaultState: AuthReducerDTO = {
@@ -28,15 +21,18 @@ const defaultState: AuthReducerDTO = {
     errorText: ''
   },
   contextEmail: '',
-  currentUser: {
-    user: null,
+  signUp: {
+    status: DataStatusType.NOT_TOUCHED,
+    errorText: ''
+  },
+  signIn: {
     status: DataStatusType.NOT_TOUCHED,
     errorText: ''
   }
 }
 
-export const authReducer = createReducer<authActionsDTO, AuthReducerDTO>(defaultState, {
-  [authActionsDTO.AUTH_VALIDATE_EMAIL_REQUEST](state: AuthReducerDTO, action: Action<authActionsDTO, { email: string }>) {
+export const authReducer = createReducer<authActionTypes, AuthReducerDTO>(defaultState, {
+  [authActionTypes.AUTH_VALIDATE_EMAIL_REQUEST](state: AuthReducerDTO, action: Action<authActionTypes, { email: string }>) {
     return {
       ...state,
       validateEmail: {
@@ -46,7 +42,7 @@ export const authReducer = createReducer<authActionsDTO, AuthReducerDTO>(default
       contextEmail: action.payload.email
     }
   },
-  [authActionsDTO.AUTH_VALIDATE_EMAIL_SUCCESS](state: AuthReducerDTO, action: Action<authActionsDTO, { status: EmailStatus }>) {
+  [authActionTypes.AUTH_VALIDATE_EMAIL_SUCCESS](state: AuthReducerDTO, action: Action<authActionTypes, { status: EmailStatus }>) {
     return {
       ...state,
       validateEmail: {
@@ -55,29 +51,76 @@ export const authReducer = createReducer<authActionsDTO, AuthReducerDTO>(default
       }
     }
   },
-  [authActionsDTO.AUTH_SIGN_UP_REQUEST](state: AuthReducerDTO, action: Action<authActionsDTO>) {
+  [authActionTypes.AUTH_SIGN_UP_REQUEST](state: AuthReducerDTO, action: Action<authActionTypes>) {
     return {
       ...state,
-      currentUser: {
+      signUp: {
+        ...state.signUp,
         status: DataStatusType.REQUESTED
       }
     }
   },
-  [authActionsDTO.AUTH_SIGN_UP_SUCCESS](state: AuthReducerDTO, action: Action<authActionsDTO, UserResponseDTO>) {
+  [authActionTypes.AUTH_SIGN_UP_SUCCESS](state: AuthReducerDTO, action: Action<authActionTypes>) {
     return {
       ...state,
-      currentUser: {
-        status: DataStatusType.SUCCEEDED,
-        user: action.payload
+      signUp: {
+        ...state.signUp,
+        status: DataStatusType.REQUESTED
       }
     }
   },
-  [authActionsDTO.AUTH_SIGN_UP_ERROR](state: AuthReducerDTO, action: Action<authActionsDTO, { errorText: string }>) {
+  [authActionTypes.AUTH_SIGN_UP_ERROR](state: AuthReducerDTO, action: Action<authActionTypes, { errorText: string }>) {
     return {
       ...state,
-      currentUser: {
+      signUp: {
+        ...state.signUp,
+        status: DataStatusType.REQUESTED,
+        errorText: action.payload.errorText
+      }
+    }
+  },
+  [authActionTypes.AUTH_SIGN_IN_REQUEST](state: AuthReducerDTO, action: Action<authActionTypes>) {
+    return {
+      ...state,
+      signIn: {
+        ...state.signIn,
+        status: DataStatusType.REQUESTED
+      }
+    }
+  },
+  [authActionTypes.AUTH_SIGN_IN_SUCCESS](state: AuthReducerDTO, action: Action<authActionTypes>) {
+    return {
+      ...state,
+      signIn: {
+        ...state.signIn,
+        status: DataStatusType.SUCCEEDED
+      }
+    }
+  },
+  [authActionTypes.AUTH_SIGN_IN_ERROR](state: AuthReducerDTO, action: Action<authActionTypes, { errorText: string }>) {
+    return {
+      ...state,
+      signIn: {
+        ...state.signIn,
         status: DataStatusType.ERROR,
         errorText: action.payload.errorText
+      }
+    }
+  },
+  [authActionTypes.AUTH_SIGN_OUT](state: AuthReducerDTO, action: Action<authActionTypes>) {
+    return {
+      ...state,
+      validateEmail: {
+        ...state.validateEmail,
+        status: DataStatusType.NOT_TOUCHED
+      },
+      signUp: {
+        ...state.signUp,
+        status: DataStatusType.NOT_TOUCHED
+      },
+      signIn: {
+        ...state.signIn,
+        status: DataStatusType.NOT_TOUCHED
       }
     }
   }

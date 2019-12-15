@@ -57,6 +57,7 @@ const ValidateEmailComponent = (props: ValidateEmailProps) => {
       case EmailStatus.free:
         return <Redirect to='/sign-up'/>
       case EmailStatus.exists:
+      case EmailStatus.notConfirmed:
         return <Redirect to='/sign-in'/>
     }
   }

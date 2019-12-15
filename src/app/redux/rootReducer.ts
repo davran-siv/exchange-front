@@ -1,6 +1,6 @@
 import { authReducer } from 'app/redux/auth/auth.reducer'
+import { userReducer } from 'app/redux/user/user.reducer'
 import { History } from 'history'
-// import { routerReducer, RouterState } from 'react-router-redux'
 import { combineReducers } from 'redux'
 
 export interface RootState {
@@ -9,5 +9,6 @@ export interface RootState {
 
 export default (history: History) =>
   combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    user: userReducer
   });

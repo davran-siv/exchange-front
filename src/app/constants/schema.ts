@@ -101,6 +101,20 @@ export const typeDefs = gql`
         refreshToken: String!
     }
 
+    input AuthLoginByCredentialsQuery {
+        email: String!
+        password: String!
+    }
+
+    type AuthLoginByCredentialsResponseQuery {
+        user: UserQuery!
+        tokens: AuthJwtTokesQuery!
+    }
+
+    input AuthRefreshTokenInput {
+        refreshToken: String!
+    }
+
     """All possible cities"""
     enum City {
         bishkek
@@ -126,11 +140,6 @@ export const typeDefs = gql`
     type Image {
         id: ID!
         path: String!
-    }
-
-    input LoginByCredentialsInput {
-        email: String!
-        password: String!
     }
 
     type Mutation {
@@ -162,12 +171,8 @@ export const typeDefs = gql`
         userFindById(id: String!): UserQuery!
         userMe: UserQuery!
         userGetEmailStatus(email: String!): UserEmailStatusQuery!
-        loginByCredentials(auth: LoginByCredentialsInput!): AuthJwtTokesQuery!
-        refreshToken(auth: RefreshTokenInput!): AuthJwtTokesQuery!
-    }
-
-    input RefreshTokenInput {
-        refreshToken: String!
+        authLoginByCredentials(auth: AuthLoginByCredentialsQuery!): AuthLoginByCredentialsResponseQuery!
+        authRefreshToken(auth: AuthRefreshTokenInput!): AuthJwtTokesQuery!
     }
 
     input UserChangePasswordInput {

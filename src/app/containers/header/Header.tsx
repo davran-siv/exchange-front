@@ -13,7 +13,11 @@ import MenuIcon from '@material-ui/icons/Menu'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import SearchIcon from '@material-ui/icons/Search'
+import { RootReducer, UserResponseDTO } from 'app/interfaces'
+import { authSignOut } from 'app/redux/auth/auth.actions'
+import { History } from 'history'
 import React from 'react'
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,7 +85,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function PrimarySearchAppBar() {
+interface PrimarySearchAppBarType {
+  currentUser: UserResponseDTO | null,
+  history: History,
+  signOut: () => void
+}
+
+const PrimarySearchAppBarComponent = (props: PrimarySearchAppBarType) => {
   const classes = useStyles({})
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -102,6 +112,16 @@ export default function PrimarySearchAppBar() {
     handleMobileMenuClose()
   }
 
+  const handleSignOut = () => {
+    handleMenuClose()
+    props.signOut()
+  }
+
+  const handleRedirect = (link) => () => {
+    props.history.push(link)
+    handleMenuClose()
+  }
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget)
   }
@@ -117,7 +137,11 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Sign In</MenuItem>
+      {
+        props.currentUser
+          ? <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
+          : <MenuItem onClick={handleRedirect('/auth')}>Sign In</MenuItem>
+      }
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   )
@@ -162,7 +186,6 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
     </Menu>
   )
-
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -230,5 +253,21 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
       {renderMenu}
     </div>
-  );
+  )
 }
+
+const mapStateToProps = (state: RootReducer, ownProps) => ({
+  ...ownProps,
+  currentUser: state.user.currentUser
+})
+
+const mapDispatchToProps = (dispatch => ({
+  signOut: () => dispatch(authSignOut())
+}))
+
+const PrimarySearchAppBar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PrimarySearchAppBarComponent)
+
+export default PrimarySearchAppBar
